@@ -1,0 +1,27 @@
+import requests
+import time
+
+baseUrl = 'https://api.coingecko.com/api/v3/'
+coinIds = ['dogecoin', 'bitcoin', 'ethereum'];
+
+def main(): 
+	while True:
+		displayAllPrices()
+		time.sleep(10)
+
+def displayAllPrices():
+	for id in coinIds:
+		requestUrl = baseUrl + 'coins/' + id + "?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"
+		r = requests.get(requestUrl)
+
+		if r.status_code != 200:
+			print("Request url link " + requestUrl + " Failed: " + str(r.status_code));
+			continue
+		
+		data = r.json();
+		print(data["name"] + ": " + str(data["market_data"]["current_price"]["usd"]));
+	    
+	print();
+
+if __name__=="__main__": 
+	main()
